@@ -21,8 +21,7 @@ def create_connection(db_file):
 def insert_clock_in(conn):
 
     cur = conn.cursor()
-    timestamp = f"{sys.argv[2]} {sys.argv[3]}"
-    cur.execute(f"INSERT INTO timesheet(clock_in) VALUES({timestamp})")
+    cur.execute(f"INSERT INTO timesheet(clock_in) VALUES(CURRENT_TIMESTAMP)")
 
     rows = cur.fetchall()
 
@@ -36,11 +35,11 @@ def insert_clock_out(conn):
 
 
     rows = cur.fetchall()
-    timestamp = f"{sys.argv[2]} {sys.argv[3]}"
+
     for row in rows:
         print(row)
         insert_cur = conn.cursor()
-        insert_cur.execute(f"INSERT INTO timesheet(id, clock_out) VALUES({timestamp}) WHERE id=row ")
+        insert_cur.execute("INSERT INTO timesheet(id, clock_out) VALUES(CURRENT_TIMESTAMP) WHERE id=row ")
 
 
 def main():
