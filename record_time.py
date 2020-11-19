@@ -39,7 +39,8 @@ def insert_clock_out(conn):
     for row in rows:
         print(row)
         insert_cur = conn.cursor()
-        insert_cur.execute("INSERT INTO timesheet(id, clock_out) VALUES(CURRENT_TIMESTAMP) WHERE id=row ")
+        insert = f"INSERT INTO timesheet(id, clock_out) VALUES(CURRENT_TIMESTAMP) WHERE id={row}"
+        insert_cur.execute(insert)
 
 
 def main():
