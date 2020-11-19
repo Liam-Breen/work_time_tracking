@@ -1,5 +1,6 @@
 import sqlite3
 from sqlite3 import Error
+import sys
 
 
 def create_connection(db_file):
@@ -17,20 +18,28 @@ def create_connection(db_file):
     return conn
 
 
-def select_all_tasks(conn):
-    """
-    Query all rows in the tasks table
-    :param conn: the Connection object
-    :return:
-    """
+def insert_clock_in(conn):
+
     cur = conn.cursor()
-    cur.execute("SELECT * FROM timesheet")
+    cur.execute("INSERT INTO timesheet(clock_in) VALUES(CURRENT_TIMESTAMP)")
 
     rows = cur.fetchall()
 
     for row in rows:
         print(row)
 
+def insert_clock_out(conn):
+
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(id) FROM timesheet;")
+
+
+    rows = cur.fetchall()
+
+    for row in rows:
+        print(row)
+        insert_cur = conn.cursor()
+        insert_cur.execute("INSERT INTO timesheet(id, clock_out) VALUES(CURRENT_TIMESTAMP) WHERE id=row ")
 
 
 def main():
@@ -40,9 +49,12 @@ def main():
     conn = create_connection(database)
     with conn:
 
-        print("2. Query all tasks")
-        select_all_tasks(conn)
+        if  'in' in sys.argv[1]:
+            insert_clock_in(conn)
+        elif  'out' in sys.argv[1]:
+            insert_clock_out(conn)
 
 
 if __name__ == '__main__':
+
     main()
